@@ -103,19 +103,21 @@ for len(s) > 0 {
 
 //Gets current array
 //Adds state s to it
-func addState(l []*state, s *state,a *state){
+func addState(l []*state, s *state,a *state) []*state{
     l = append(l,s)
 
     //Checks if s has e arrows from it and makes sure its not an accept state
-    if s != a && s.symbol = 0{
+    if s != a && s.symbol == 0 {
 
         //Follow first edge and call same function for state pointed to by edge 1
         l = addState(l,s.edge1,a)
         //Check if nil,if not do same thing
         if s.edge2 != nil {
-            l.addState(l, s.edge2,a)
+            l = addState(l, s.edge2,a)
         }
     }
+
+    return l
 }
 
 //Figure out if po matches s
