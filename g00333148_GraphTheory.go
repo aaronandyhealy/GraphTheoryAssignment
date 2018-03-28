@@ -102,7 +102,32 @@ for len(s) > 0 {
   return string(pofix)
 }
 
+func pomatch(po string,s string) bool {
+    ismatch := false
+    ponfa := poregtonfa(po)
+
+    current := []*state{}
+    next := []*state{}
+
+    for _,r := range s {
+        for _, c := range current {
+            if c.symbol == r {
+
+            }
+        }
+        current, next = next, []*state{}
+    }
+
+    for _, c := range current {
+        if c == ponfa.accept {
+            ismatch = true
+            break
+        }
+    }
+
+    return ismatch
+}
+
 func main() {
-    nfa := poregtonfa(intopost("a.b.c*"))
-    fmt.Println(nfa)
+    fmt.Println(pomatch("ab.c*|","cccc"))
 }
