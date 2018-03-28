@@ -101,22 +101,37 @@ for len(s) > 0 {
   return string(pofix)
 }
 
+func 
+
+//Figure out if po matches s
 func pomatch(po string,s string) bool {
     ismatch := false
+
+    //create nfa from regex
     ponfa := poregtonfa(po)
 
+    //Keep track of current state and the next state
     current := []*state{}
     next := []*state{}
 
+    //addState is passed the initial and accept state
+    current = addState(current[:],ponfa.initial,ponfa.accept)
+
+
+    //Generate next state from current repeatedly
+    //Read s char at a time
+    //Take all current states,check if labelled by char from s
     for _,r := range s {
         for _, c := range current {
             if c.symbol == r {
-
+                next = addState(next[:],s.edge1,ponfa.accept)
             }
         }
+        //Swap current for next and reset next to empty array
         current, next = next, []*state{}
     }
 
+    //Loop through to see if any are the accept state
     for _, c := range current {
         if c == ponfa.accept {
             ismatch = true
