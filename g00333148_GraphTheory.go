@@ -19,52 +19,71 @@ func poregtonfa(pofix string) *nfa {
 
     for _, r := range pofix {
         switch r {
-        case '.'  :
-            frag2 := nfastack[len(nfastack)-1]
-            nfastack = nfastack[:len(nfastack)-1]
-            frag1 := nfastack[len(nfastack)-1]
-            nfastack = nfastack[:len(nfastack)-1]
-
-            frag1.accept.edge1 = frag2.initial
-
-            nfastack = append(nfastack,&nfa{initial: frag1.initial, accept: frag2.accept})
-        case '?':
-			// get the last thing off the stack and store in frag1
-			frag := nfastack[len(nfastack)-1]
-			// get rid of the last thing on the stack, because it's already on frag1
-			nfastack = nfastack[:len(nfastack)-1]
-
-			accept := state{}
-			// the new initial state that points to the initial of the fragment at edge1
-			// and points to the new accept state at edge2
-			initial := state{edge1: frag.initial, edge2: &accept}
-			// join the fragment edge1 to the new accept state
-			frag.accept.edge1 = &accept
-
-			// then we append the new nfa accept state and initial state we created above to the nfastack
-            nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
+        
         case '|':
+            // Take the last thing off the stack and store in frag2
+            // Take the last thing on the stack, it's already on frag2
+            //Repeat for frag1
             frag2 := nfastack[len(nfastack)-1]
             nfastack = nfastack[:len(nfastack)-1]
             frag1 := nfastack[len(nfastack)-1]
             nfastack = nfastack[:len(nfastack)-1]
 
+            // New initial state that points to the initial of the frag at edge1 and points to the new initial state at edge2
+            // Join the frag at edge1 to the new accept state
+            // Join the frag at edge2 to the new accept state
             initial := state{edge1: frag1.initial,edge2: frag2.initial}
             accept := state{}
             frag1.accept.edge1 = &accept
             frag2.accept.edge1 = &accept
 
+            // Append the new nfa accept state and initial state we created above to the nfastack
             nfastack = append(nfastack,&nfa{initial: &initial, accept: &accept})
-       
+           
+        case '.':
+            // Take the last thing off the stack and store in frag2
+            // Take the last thing on the stack, it's already on frag2
+            //Repeat for frag1
+            frag2 := nfastack[len(nfastack)-1]
+            nfastack = nfastack[:len(nfastack)-1]
+            frag1 := nfastack[len(nfastack)-1]
+            nfastack = nfastack[:len(nfastack)-1]
+
+            // Join the frag at edge1 to the inital state at frag2
+            frag1.accept.edge1 = frag2.initial
+
+            // Append the new frag2 accept state and frag1 initial state we created above to the nfastack
+            nfastack = append(nfastack,&nfa{initial: frag1.initial, accept: frag2.accept})
+
+        case '?':
+			// Take the last thing off the stack and store in frag1
+            // Take the last thing on the stack, it's already on frag1
+            frag := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+   
+            // New initial state that points to the initial of the frag at edge1 and points to the new accept state at edge2
+			// Join the frag at edge1 to the new accept state
+            accept := state{}
+            initial := state{edge1: frag.initial, edge2: &accept}
+			frag.accept.edge1 = &accept
+
+			// Append the new nfa accept state and initial state we created above to the nfastack
+            nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
+
        case '*':
+            // Take the last thing off the stack and store in frag1
+            // Take the last thing on the stack, it's already on frag1
             frag := nfastack[len(nfastack)-1]
             nfastack = nfastack[:len(nfastack)-1]
            
+            // New initial state that points to the initial of the frag at edge1 and points to the new accept state at edge2
+			// Join the frag at edge2 to the new accept state
             accept := state{}
             initial := state{edge1: frag.initial,edge2: &accept}
             frag.accept.edge1 = frag.initial
             frag.accept.edge2 = &accept
 
+            // Append the new nfa accept state and initial state we created above to the nfastack
             nfastack = append(nfastack,&nfa{initial: &initial, accept: &accept})
        
        default:
@@ -82,7 +101,7 @@ return nfastack[0]
 
 //Converts infix to postfix
 func intopost(infix string) string {
-    specials := map[rune]int{'*':10,'.':9,'|':8}
+    specials := map[rune]int{'*':10,'?':10,'.':9,'|':8}
 
     pofix, s := []rune{},[]rune{}
   
