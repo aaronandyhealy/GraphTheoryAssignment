@@ -189,17 +189,21 @@ func pomatch(po string,s string) bool {
         }
     }
 
+    //Return true of false if match or not
     return ismatch
 }
 
 func main() {
+    //Ask for user input for the string they want to test
     var userInput string
     var regexInput string
     fmt.Println("Enter String You Want to Test: ")
 	fmt.Scan(&userInput)
 
+    //Ask user for the regular expression they want to test the string against
     fmt.Println("Enter the Regex You want to Test the String Against: ")
 	fmt.Scan(&regexInput)
 
+    //Output if the match is true or false
     fmt.Println(pomatch(regexInput,userInput))
 }
