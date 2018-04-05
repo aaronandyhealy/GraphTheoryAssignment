@@ -25,9 +25,9 @@ go run G00333148_GraphTheory.go
 ## Testing the Program
 To test the program enter the string and regex you want tested when prompted to. The program will give either a true of false return depending on the result. If true the string is a direct match, otherwise the result will be false 
 ## Technologies Used
-GoLang
-Visual Studio Code
-Git
+- GoLang
+- Visual Studio Code
+- Git
 
 ## Resources
 - Dr Ian McLoughlin - Galway - Mayo Institute of Technology
